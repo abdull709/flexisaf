@@ -1,0 +1,29 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Read the month numbers, bathing soap, and facewash data
+months = q.cells("A2:A13")
+bathing_soap = q.cells("E2:E13")
+facewash = q.cells("C2:C13")
+
+# Create a DataFrame with the data
+df = pd.DataFrame({
+    'Month': months.iloc[:, 0].astype(int),
+    'Bathing_Soap': bathing_soap.iloc[:, 0].astype(int),
+    'Face_Wash': facewash.iloc[:, 0].astype(int)
+})
+
+# Create a single line chart for both products
+plt.figure(figsize=(8, 6))
+
+plt.plot(df['Month'], df['Bathing_Soap'], marker='o', color='blue', linewidth=2, label='Bathing Soap')
+plt.plot(df['Month'], df['Face_Wash'], marker='o', color='red', linewidth=2, label='Face Wash')
+
+# Add titles, labels, grid, and legend
+plt.title("Sales Comparison: Bathing Soap vs Face Wash")
+plt.xlabel("Month")
+plt.ylabel("Sales Units")
+plt.grid(True)
+plt.legend()
+
+plt.show()
