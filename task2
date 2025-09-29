@@ -1,0 +1,96 @@
+import random
+
+def create_board():
+    return [" " for _ in range(9)]  
+
+def print_board(board):
+    print("\n")
+    for row in [board[i:i+3] for i in range(0, 9, 3)]:
+        print("|".join(row))
+        print("-" * 5)
+    print("\n")
+
+def check_winner(board, player):
+    win_positions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  
+        [0, 4, 8], [2, 4, 6]              
+    ]
+    for pos in win_positions:
+        if all(board[i] == player for i in pos):
+            return True
+    return False
+
+
+def check_tie(board):
+    return " " not in board
+
+
+def computer_move(board):
+    
+    for i in range(9):
+        if board[i] == " ":
+            board[i] = "O"
+            if check_winner(board, "O"):
+                return i
+            board[i] = " "  # undo move
+
+    # Next, check if player could win on next move, block them
+    for i in range(9):
+        if board[i] == " ":
+            board[i] = "X"
+            if check_winner(board, "X"):
+                board[i] = " "  # undo move
+                return i
+            board[i] = " "  # undo move
+
+    # Otherwise, choose random available spot
+    available_moves = [i for i, spot in enumerate(board) if spot == " "]
+    return random.choice(available_moves)
+
+
+
+def play_game():
+    board = create_board()
+    print("Welcome to Tic-Tac-Toe! You are X and computer is O.")
+    print_board(board)
+
+    while True:
+        # Player move
+        try:
+            move = int(input("Enter your move (1-9): ")) - 1
+            if board[move] != " " or move not in range(9):
+                print("Invalid move. Try again.")
+                continue
+        except (ValueError, IndexError):
+            print("Please enter a number between 1 and 9.")
+            continue
+
+        board[move] = "X"
+        print_board(board)
+
+        if check_winner(board, "X"):
+            print("🎉 You win!")
+            break
+        if check_tie(board):
+            print("🤝 It's a tie!")
+            break
+
+        # AI move
+        computer_choice = computer_move(board)
+        board[computer_choice] = "O"
+        print("computer chose position", computer_choice + 1)
+        print_board(board)
+
+        if check_winner(board, "O"):
+            print("💻 Computer wins!")
+            break
+        if check_tie(board):
+            print("🤝 It's a tie!")
+            break
+
+# -----------------------------
+# Call the main game loop
+# -----------------------------
+if __name__ == "__main__":
+    play_game()
