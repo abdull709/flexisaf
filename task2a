@@ -1,0 +1,24 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
+months = q.cells('A2:A13')
+profits = q.cells('I2:I13')
+
+
+df = pd.DataFrame({
+    'Month': months.iloc[:, 0].astype(int),
+    'Total_Profit': profits.iloc[:, 0].astype(int)
+})
+
+
+plt.figure(figsize=(8, 6))
+plt.plot(df['Month'], df['Total_Profit'], marker='o', linewidth=2, markersize=8)
+plt.title('Total Profit by Month', fontsize=14, fontweight='bold')
+plt.xlabel('Month', fontsize=12)
+plt.ylabel('Total Profit ($)', fontsize=12)
+plt.grid(True, alpha=0.3)
+plt.xticks(df['Month'])
+
+
+plt.show()
